@@ -1,6 +1,4 @@
 #include <string>
-
-#include <string>
 #include <regex>
 #include <iostream>
 #include <sstream>
@@ -11,10 +9,11 @@ using namespace std;
 
 class User {
 public:
+    // Конструктор класса User, инициализирующий все поля
     User(const string& lastName, const string& firstName, const string& middleName,
         const string& phoneNumber, const string& email, const string& login, const string& password);
 
-    // геттеры
+    // Геттеры для получения значений полей
     string getLastName() const;
     string getFirstName() const;
     string getMiddleName() const;
@@ -23,7 +22,8 @@ public:
     string getLogin() const;
     string getPasswordHash() const;
     string getFullName() const;
-    // сеттеры
+
+    // Сеттеры для установки значений полей
     void setLastName(const string& lastName);
     void setFirstName(const string& firstName);
     void setMiddleName(const string& middleName);
@@ -32,13 +32,15 @@ public:
     void setLogin(const string& login);
     void setPassword(const string& password);
 
-    // проверка валидности данных
+    // Проверка валидности данных пользователя
     static bool isValidPhoneNumber(const string& phoneNumber);
     static bool isValidEmail(const string& email);
     static bool isValidPassword(const string& password);
-    static bool isValidName(const string& password);
+    static bool isValidName(const string& name);
+
     // Переопределение оператора ==
     bool operator==(const User& other) const;
+
 private:
     string lastName;
     string firstName;
@@ -48,16 +50,19 @@ private:
     string login;
     string passwordHash;
 
-    // вспомогательные методы
-    string hashPassword(const string& password) const;
-    bool hasDigits(const string& str) const;
-    void capitalize(string& str) const;
-    static bool isCorrectPasswordFormat(const string& password);
-}; 
+    // Вспомогательные методы
+    string hashPassword(const string& password) const; // Хэширование пароля
+    bool hasDigits(const string& str) const; // Проверка наличия цифр в строке
+    void capitalize(string& str) const; // Приведение первой буквы к верхнему регистру
+    static bool isCorrectPasswordFormat(const string& password); // Проверка формата пароля
+};
+
+// Переопределение оператора == для сравнения пользователей по логину
 bool User::operator==(const User& other) const {
     return this->login == other.login;
 }
 
+// Конструктор класса User, инициализирующий поля и хэширующий пароль
 User::User(const string& lastName, const string& firstName, const string& middleName,
     const string& phoneNumber, const string& email, const string& login, const string& password)
     : lastName(lastName), firstName(firstName), middleName(middleName), phoneNumber(phoneNumber),
@@ -66,7 +71,8 @@ User::User(const string& lastName, const string& firstName, const string& middle
     capitalize(this->firstName);
     capitalize(this->middleName);
 }
-//string getLastName() const;
+
+// Геттеры для получения значений полей
 string User::getLastName() const {
     return lastName;
 }
@@ -95,14 +101,15 @@ string User::getPasswordHash() const {
     return passwordHash;
 }
 
-std::string User::getFullName() const {
+// Метод для получения полного имени пользователя
+string User::getFullName() const {
     return lastName + " " + firstName + " " + middleName;
 }
 
+// Сеттеры для установки значений полей
 void User::setLastName(const string& lastName) {
     this->lastName = lastName;
     capitalize(this->lastName);
-
 }
 
 void User::setFirstName(const string& firstName) {
@@ -146,28 +153,32 @@ void User::setPassword(const string& password) {
     }
 }
 
+// Проверка валидности номера телефона
 bool User::isValidPhoneNumber(const string& phoneNumber) {
-    // формат +7-(222)-222-22-22
+    // Формат +7-(222)-222-22-22
     regex pattern(R"(^\+\d{1,2}-\(\d{3}\)-\d{3}-\d{2}-\d{2}$)");
     return regex_match(phoneNumber, pattern);
 }
 
-bool User::isValidEmail(const string& email){
-    // простая проверка на формат
+// Проверка валидности e-mail
+bool User::isValidEmail(const string& email) {
+    // Простая проверка на формат
     regex pattern(R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
     return regex_match(email, pattern);
 }
 
-bool User::isValidPassword(const string& password){
+// Проверка валидности пароля
+bool User::isValidPassword(const string& password) {
     return isCorrectPasswordFormat(password);
 }
 
-bool User::isValidName(const string& password)
-{
+// Проверка валидности имени (фамилии или отчества)
+bool User::isValidName(const string& name) {
     regex pattern(R"(^[a-zA-ZА-Яа-яЁё]{2,}$)");
-    return regex_match(password, pattern);
+    return regex_match(name, pattern);
 }
 
+// Метод для хэширования пароля
 string User::hashPassword(const string& password) const {
     // Пример простейшего хэширования (не для реального применения!)
     // В реальной программе следует использовать более безопасные алгоритмы хэширования
@@ -175,10 +186,12 @@ string User::hashPassword(const string& password) const {
     return to_string(hasher(password));
 }
 
+// Проверка наличия цифр в строке
 bool User::hasDigits(const string& str) const {
     return any_of(str.begin(), str.end(), ::isdigit);
 }
 
+// Приведение первой буквы к верхнему регистру
 void User::capitalize(string& str) const {
     if (!str.empty()) {
         str[0] = toupper(str[0]);
@@ -188,6 +201,7 @@ void User::capitalize(string& str) const {
     }
 }
 
+// Проверка формата пароля (минимум 8 символов, одна заглавная, одна строчная, одна цифра, один специальный символ)
 bool User::isCorrectPasswordFormat(const string& password) {
     if (password.length() < 8) {
         return false;
