@@ -4,7 +4,7 @@
 #include <cmath>     // Для математических функций, таких как abs и arg
 #include <vector>    // Для работы с векторами
 
-using namespace std;
+using namespace std;  // Использование стандартного пространства имен
 
 // Определение структуры для работы с комплексными числами
 struct Complex {
@@ -12,65 +12,66 @@ struct Complex {
     double imag;  // Мнимая часть
 
     // Конструкторы
-    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}  // Инициализация комплексного числа
 
     // Функция для сложения
-    Complex AddComplex( Complex& other)  {
-        return Complex(real + other.real, imag + other.imag);
+    Complex AddComplex(Complex& other) {
+        return Complex(real + other.real, imag + other.imag);  // Возвращает сумму текущего и другого комплексного числа
     }
 
     // Функция для вычитания
-    Complex SubComplex( Complex& other)  {
-        return Complex(real - other.real, imag - other.imag);
+    Complex SubComplex(Complex& other) {
+        return Complex(real - other.real, imag - other.imag);  // Возвращает разность текущего и другого комплексного числа
     }
 
     // Функция для умножения
-    Complex MulComplex( Complex& other)  {
-        return Complex(real * other.real - imag * other.imag, real * other.imag + imag * other.real);
+    Complex MulComplex(Complex& other) {
+        return Complex(real * other.real - imag * other.imag, real * other.imag + imag * other.real);  // Возвращает произведение текущего и другого комплексного числа
     }
 
-    //  Функция для деления
-    Complex DivComplex( Complex& other)  {
-        double denominator = other.real * other.real + other.imag * other.imag;
+    // Функция для деления
+    Complex DivComplex(Complex& other) {
+        double denominator = other.real * other.real + other.imag * other.imag;  // Вычисление знаменателя
         return Complex((real * other.real + imag * other.imag) / denominator,
-            (imag * other.real - real * other.imag) / denominator);
+            (imag * other.real - real * other.imag) / denominator);  // Возвращает частное текущего и другого комплексного числа
     }
 
     // Вычисление модуля комплексного числа
     double abs() const {
-        return sqrt(real * real + imag * imag);
+        return sqrt(real * real + imag * imag);  // Возвращает модуль комплексного числа
     }
 
     // Вычисление аргумента комплексного числа
     double arg() const {
-        return atan2(imag, real);
+        return atan2(imag, real);  // Возвращает аргумент комплексного числа
     }
 
-    //функция для ввода
+    // Функция для ввода
     void Input() {
-        cin >> real >> imag;
+        cin >> real >> imag;  // Ввод действительной и мнимой частей
     }
-    //Функция для вывода
+
+    // Функция для вывода
     void Print() {
-        cout << real;
+        cout << real;  // Вывод действительной части
         if (imag >= 0) {
-            cout << " + " << imag << "i";
+            cout << " + " << imag << "i";  // Вывод мнимой части с положительным знаком
         }
         else {
-            cout << " - " << imag << "i";
+            cout << " - " << -imag << "i";  // Вывод мнимой части с отрицательным знаком
         }
     }
 };
 
 // Функция для вывода комплексного числа в алгебраической форме
 void printComplex(Complex& c) {
-    c.Print();
+    c.Print();  // Вызов функции Print для вывода комплексного числа
 }
 
 // Функция для преобразования комплексного числа из алгебраической формы в тригонометрическую и экспоненциальную формы
 void algebraicToTrigAndExp(Complex& c) {
-    double r = c.abs();  // Модуль комплексного числа
-    double theta = c.arg();  // Аргумент комплексного числа
+    double r = c.abs();  // Вычисление модуля комплексного числа
+    double theta = c.arg();  // Вычисление аргумента комплексного числа
 
     // Вывод тригонометрической формы
     cout << "Тригонометрическая форма: " << r << " * (cos(" << theta << ") + i*sin(" << theta << "))\n";
@@ -81,7 +82,7 @@ void algebraicToTrigAndExp(Complex& c) {
 // Функция для преобразования комплексного числа из тригонометрической формы в алгебраическую и экспоненциальную формы
 void trigToAlgebraicAndExp(double r, double theta) {
     // Преобразование в алгебраическую форму
-    Complex c(r * cos(theta), r * sin(theta));
+    Complex c(r * cos(theta), r * sin(theta));  // Создание комплексного числа на основе тригонометрической формы
     cout << "Алгебраическая форма: ";
     printComplex(c);  // Вывод алгебраической формы
     cout << "\n";
@@ -93,7 +94,7 @@ void trigToAlgebraicAndExp(double r, double theta) {
 // Функция для преобразования комплексного числа из экспоненциальной формы в алгебраическую и тригонометрическую формы
 void expToAlgebraicAndTrig(double r, double theta) {
     // Преобразование в алгебраическую форму
-    Complex c(r * cos(theta), r * sin(theta));
+    Complex c(r * cos(theta), r * sin(theta));  // Создание комплексного числа на основе экспоненциальной формы
     cout << "Алгебраическая форма: ";
     printComplex(c);  // Вывод алгебраической формы
     cout << "\n";
@@ -104,16 +105,17 @@ void expToAlgebraicAndTrig(double r, double theta) {
 
 // Функция для возведения комплексного числа в степень
 Complex pow(const Complex& c, int n) {
-    double r = pow(c.abs(), n);
-    double theta = c.arg() * n;
-    return Complex(r * cos(theta), r * sin(theta));
+    double r = pow(c.abs(), n);  // Вычисление модуля числа в степени n
+    double theta = c.arg() * n;  // Вычисление аргумента числа в степени n
+    return Complex(r * cos(theta), r * sin(theta));  // Возвращает результат возведения в степень
 }
+
 // Главная функция
 int main() {
     setlocale(0, "");  // Установка локали для корректного вывода сообщений на русском языке
-    int choice = 0;
+    int choice = 0;  // Переменная для хранения выбора пользователя
 
-    while (true) {
+    while (true) {  // Бесконечный цикл для вывода меню и выполнения выбранных операций
         // Меню выбора операции
         cout << "Выберите операцию:\n";
         cout << "1. Сложение\n";
@@ -126,130 +128,129 @@ int main() {
         cout << "8. Возведение в степень\n";
         cout << "9. Корни\n";
         cout << "10. Закрыть\n";
-        cout << "Введите свой выбор: ";
+        cout << "Введите свой выбор: ";  // Запрос ввода выбора пользователя
         cin >> choice;  // Ввод выбора пользователя
 
-        if (choice == 10) {
-            break;  // Завершение программы
+        if (choice == 10) {  // Если пользователь выбрал завершение программы
+            break;  // Выход из цикла и завершение программы
         }
 
-        Complex c1, c2;  // Комплексные числа для операций
-        double r, theta;  // Радиус и аргумент для тригонометрической и экспоненциальной форм
-        int n;  // Степень для операций возведения в степень и нахождения корней
+        Complex c1, c2;  // Переменные для хранения двух комплексных чисел
+        double r, theta;  // Переменные для хранения модуля и аргумента
+        int n;  // Переменная для хранения степени
 
-        switch (choice) {
+        switch (choice) {  // Обработка выбора пользователя
         case 1:
             // Сложение двух комплексных чисел
             cout << "Введите первое комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод первого комплексного числа
             cout << "Введите второе комплексное число (real imag): ";
-            c2.Input();
+            c2.Input();  // Ввод второго комплексного числа
             cout << "Результат: ";
-            c1 = c1.AddComplex(c2);
-            printComplex(c1);
+            c1 = c1.AddComplex(c2);  // Сложение комплексных чисел
+            printComplex(c1);  // Вывод результата
             cout << "\n";
             break;
 
         case 2:
             // Умножение двух комплексных чисел
             cout << "Введите первое комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод первого комплексного числа
             cout << "Введите второе комплексное число (real imag): ";
-            c2.Input();
+            c2.Input();  // Ввод второго комплексного числа
             cout << "Результат: ";
-            c1 = c1.MulComplex(c2);
-            printComplex(c1);
+            c1 = c1.MulComplex(c2);  // Умножение комплексных чисел
+            printComplex(c1);  // Вывод результата
             cout << "\n";
             break;
 
         case 3:
             // Разность двух комплексных чисел
             cout << "Введите первое комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод первого комплексного числа
             cout << "Введите второе комплексное число (real imag): ";
-            c2.Input();
+            c2.Input();  // Ввод второго комплексного числа
             cout << "Результат: ";
-            c1 = c1.SubComplex(c2);
-            printComplex(c1);
+            c1 = c1.SubComplex(c2);  // Вычитание комплексных чисел
+            printComplex(c1);  // Вывод результата
             cout << "\n";
             break;
 
         case 4:
             // Деление двух комплексных чисел
             cout << "Введите первое комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод первого комплексного числа
             cout << "Введите второе комплексное число (real imag): ";
-            c2.Input();
+            c2.Input();  // Ввод второго комплексного числа
             cout << "Результат: ";
-            c1 = c1.DivComplex(c2);
-            printComplex(c1);
+            c1 = c1.DivComplex(c2);  // Деление комплексных чисел
+            printComplex(c1);  // Вывод результата
             cout << "\n";
             break;
 
         case 5:
             // Преобразование комплексного числа из алгебраической формы в тригонометрическую и экспоненциальную
             cout << "Введите комплексное число (real imag): ";
-            c1.Input();
-            algebraicToTrigAndExp(c1);
+            c1.Input();  // Ввод комплексного числа
+            algebraicToTrigAndExp(c1);  // Преобразование в тригонометрическую и экспоненциальную формы
             break;
 
         case 6:
             // Преобразование комплексного числа из тригонометрической формы в алгебраическую и экспоненциальную
             cout << "Введите модуль и аргумент r и theta: ";
-            cin >> r >> theta;
-            trigToAlgebraicAndExp(r, theta);
+            cin >> r >> theta;  // Ввод модуля и аргумента
+            trigToAlgebraicAndExp(r, theta);  // Преобразование в алгебраическую и экспоненциальную формы
             break;
+
         case 7:
             // Преобразование комплексного числа из экспоненциальной формы в алгебраическую и тригонометрическую
             cout << "Введите модуль и аргумент r и theta: ";
-            cin >> r >> theta;
-            expToAlgebraicAndTrig(r, theta);
+            cin >> r >> theta;  // Ввод модуля и аргумента
+            expToAlgebraicAndTrig(r, theta);  // Преобразование в алгебраическую и тригонометрическую формы
             break;
 
         case 8:
             // Возведение комплексного числа в степень
             cout << "Введите комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод комплексного числа
             cout << "Введите степень: ";
-            cin >> n;
+            cin >> n;  // Ввод степени
             cout << "Результат: ";
-            c1 = pow(c1, n);
-            printComplex(c1);
+            c1 = pow(c1, n);  // Возведение в степень
+            printComplex(c1);  // Вывод результата
             cout << "\n";
             break;
 
-        case 9:
-        {
+        case 9: {
             // Нахождение корней комплексного числа
             cout << "Введите комплексное число (real imag): ";
-            c1.Input();
+            c1.Input();  // Ввод комплексного числа
             cout << "Введите степень: ";
-            cin >> n;
+            cin >> n;  // Ввод степени
 
-            vector<Complex> roots;
-            // Нахождение модуля и аргумента корней
-            double magnitude = pow(c1.abs(), 1.0 / n);
-            double initialTheta = c1.arg();
+            vector<Complex> roots;  // Вектор для хранения корней
+            double magnitude = pow(c1.abs(), 1.0 / n);  // Вычисление модуля корня
+            double initialTheta = c1.arg();  // Вычисление начального аргумента корня
 
             // Вычисление всех корней
             for (int k = 0; k < n; ++k) {
-                double theta = (initialTheta + 2 * M_PI * k) / n;
-                roots.push_back(Complex(magnitude * cos(theta), magnitude * sin(theta)));
+                double theta = (initialTheta + 2 * M_PI * k) / n;  // Вычисление аргумента k-го корня
+                roots.push_back(Complex(magnitude * cos(theta), magnitude * sin(theta)));  // Добавление k-го корня в вектор
             }
 
-            cout << "Корни:\n";
+            cout << "Корни:\n";  // Вывод заголовка
 
             // Вывод всех корней
             for (auto root : roots) {
-                printComplex(root);
+                printComplex(root);  // Вывод k-го корня
                 cout << "\n";
             }
             break;
         }
         default:
             // Обработка неверного выбора
-            cout << "Неверный выбор. Попробуйте еще раз.\n";
+            cout << "Неверный выбор. Попробуйте еще раз.\n";  // Вывод сообщения об ошибке выбора
         }
     }
-    return 0;
+    return 0;  // Завершение программы
 }
