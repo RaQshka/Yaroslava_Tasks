@@ -1,7 +1,5 @@
-﻿#include <iostream>    // Для работы с вводом и выводом
-#include <vector>      // Для работы с динамическими массивами (векторами)
-#include <algorithm>   // Для использования алгоритмов STL
-#include <bitset>      // Для работы с битовыми наборами
+﻿#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -17,50 +15,59 @@ vector<vector<int>> buildAdjacencyMatrix(int n, vector<pair<int, int>>& edges) {
     return adjMatrix;
 }
 
-// Функция для проверки, покрывает ли множество вершин все вершины графа
-bool isCover(const vector<vector<int>>& adjMatrix, const bitset<32>& subset) {
+// Функция для проверки, является ли множество вершин независимым
+bool isIndependentSet(const vector<vector<int>>& adjMatrix, const vector<int>& subset) {
     int n = adjMatrix.size();
-    vector<bool> covered(n, false);  // Вектор для отслеживания покрытых вершин
 
-    // Проверка, какие вершины покрыты множеством
+    // Проверка, нет ли смежных вершин в подмножестве
     for (int i = 0; i < n; ++i) {
         if (subset[i]) {  // Если вершина включена в подмножество
-            for (int j = 0; j < n; ++j) {
-                if (adjMatrix[i][j] == 1) {
-                    covered[j] = true;  // Вершина j покрыта
+            for (int j = i + 1; j < n; ++j) {
+                if (subset[j] && adjMatrix[i][j] == 1) {  // Если вершина j также включена и смежна с i
+                    return false;  // Не является независимым множеством
                 }
             }
         }
     }
 
-    // Проверка, все ли вершины графа покрыты
-    return all_of(covered.begin(), covered.end(), [](bool v) { return v; });
+    return true;  // Независимое множество
 }
 
-// Функция для поиска минимального покрытия вершин
-vector<int> findMinimumVertexCover(vector<vector<int>>& adjMatrix) {
+// Функция для поиска максимального независимого множества
+vector<int> findMaximumIndependentSet(vector<vector<int>>& adjMatrix) {
     int n = adjMatrix.size();
-    vector<int> bestSet;  // Лучшее найденное покрытие
-    int minSize = n + 1;  // Начальная минимальная размерность (больше, чем возможно)
+    vector<int> bestSet(n, 0);  // Лучшее найденное независимое множество
+    int maxSize = 0;  // Начальный максимальный размер - ноль
 
     // Перебор всех возможных подмножеств вершин
     for (int i = 1; i < (1 << n); ++i) {
-        bitset<32> subset(i);  // Создание битового набора для подмножества
-        if (isCover(adjMatrix, subset)) {  // Проверка, является ли подмножество покрытием
-            int setSize = subset.count();  // Размер текущего подмножества
-            if (setSize < minSize) {  // Обновление наименьшего покрытия
-                minSize = setSize;
-                bestSet.clear();
-                for (int j = 0; j < n; ++j) {
-                    if (subset[j]) {
-                        bestSet.push_back(j);  // Добавление вершины в минимальное покрытие
-                    }
-                }
+        vector<int> subset(n, 0);  // Создание подмножества
+        int count = 0;
+
+        for (int j = 0; j < n; ++j) {
+            if (i & (1 << j)) {
+                subset[j] = 1;  // Добавление вершины в подмножество
+                count++;
+            }
+        }
+
+        if (isIndependentSet(adjMatrix, subset)) {  // Проверка, является ли подмножество независимым
+            if (count > maxSize) {  // Обновление наибольшего независимого множества
+                maxSize = count;
+                bestSet = subset;
             }
         }
     }
 
-    return bestSet;
+    // Создание списка вершин на основе лучшего найденного подмножества
+    vector<int> result;
+    for (int i = 0; i < n; ++i) {
+        if (bestSet[i]) {
+            result.push_back(i);
+        }
+    }
+
+    return result;
 }
 
 // Функция для ввода готовой матрицы смежности
@@ -79,7 +86,7 @@ vector<vector<int>> inputAdjacencyMatrix(int n) {
 
 int main() {
     // Ввод данных
-    setlocale(0, "");  
+    setlocale(0, "");
     int n, m, choice;  // Переменные для количества вершин, рёбер и выбора способа ввода
 
     cout << "Выберите способ ввода графа:\n";
@@ -109,7 +116,6 @@ int main() {
         cout << "Некорректный выбор.\n";
         return 1;  // Завершение программы с кодом ошибки
     }
-
     // Построение матрицы смежности
     cout << "\nМатрица смежности: \n";
     for (int i = 0; i < adjMatrix.size(); i++) {
@@ -119,17 +125,17 @@ int main() {
         cout << endl;
     }
 
-    // Поиск минимального покрытия вершин
-    vector<int> minCover = findMinimumVertexCover(adjMatrix);
+    // Поиск максимального независимого множества
+    vector<int> maxIndependentSet = findMaximumIndependentSet(adjMatrix);
 
     // Вывод результата
-    cout << "Минимальное множество вершин, покрывающее все вершины графа:\n";
-    for (int vertex : minCover) {
-        cout << vertex << " ";  // Вывод вершин минимального покрытия
+    cout << "Максимальное независимое множество вершин графа:\n";
+    for (int vertex : maxIndependentSet) {
+        cout << vertex << " ";  // Вывод вершин максимального независимого множества
     }
-    cout << "\nЧисло внешней устойчивости графа: " << minCover.size() << endl;  // Вывод размера покрытия
+    cout << "\nЧисло внешней устойчивости графа: " << maxIndependentSet.size() << endl;  // Вывод размера независимого множества
 
-    return 0;  
+    return 0;
 }
 /********************************************************************/
 /*5 7

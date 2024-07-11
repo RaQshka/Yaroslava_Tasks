@@ -1,7 +1,6 @@
 ﻿#define _USE_MATH_DEFINES  // Включение математических констант, таких как M_PI, из cmath
 #include <iostream>  // Для работы с вводом и выводом
 #include <cmath>     // Для математических функций и констант
-#include <iomanip>   // Для управления форматированием вывода чисел
 
 using namespace std;
 
@@ -21,14 +20,14 @@ double calculateCos(double x, double epsilon) {
     while (abs(term) > epsilon) {
         term = -term * x * x / ((2 * n - 1) * (2 * n));  // Вычисление следующего члена ряда
         result += term;  // Добавление следующего члена к сумме ряда
-        n++; 
+        n++;
     }
 
-    return result; 
+    return result;
 }
 
 int main() {
-    setlocale(0, "");  
+    setlocale(0, "");
 
     double x0, epsilon;  // Переменные для значения x и заданной точности epsilon
     char choice;  // Переменная для выбора единиц измерения угла (радианы или градусы)
@@ -60,16 +59,9 @@ int main() {
     // Вычисление значения косинуса с заданной точностью
     double cosValue = calculateCos(x0, epsilon);
 
-    // Проверка на корректность результата вычисления
-    if (isinf(cosValue) || isnan(cosValue)) {
-        cout << "Ошибка: не удалось вычислить косинус из-за переполнения или некорректных данных." << endl;
-        return 1;  
-    }
-
     // Установка формата вывода чисел с фиксированной точностью
-    cout << fixed << setprecision(8);
 
     cout << "cos(" << x0 << " радиан) = " << cosValue << " с точностью " << epsilon << endl;
 
-    return 0;  
+    return 0;
 }
